@@ -26,6 +26,7 @@ Here are some tasks you can undertake to improve your understanding of the follo
 
 ### React
 - When you click the edit button on a task the task name input should be focused. [Helpful Resource](https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref)
+- Remove the Edit, Save & Cancel buttons replacing them with events to improve the user experience. You can use onClick, onBlur, onKeyPress(esc & enter) bonus points if you update the styling to make it look cool. [Helpful Resource](https://react.dev/learn/responding-to-events)
 
 ### Typescript
 
