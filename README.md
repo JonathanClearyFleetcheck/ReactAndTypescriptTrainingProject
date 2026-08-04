@@ -25,7 +25,7 @@ Here are some tasks you can undertake to improve your understanding of the follo
 - [NPM - Documentation](https://docs.npmjs.com/)
 
 ### React
-- When you click the edit button on a task the task name input should be focused. [Helpful Resource](https://react.dev/reference/react/useRef)
+- When you click the edit button on a task the task name input should be focused. [Helpful Resource](https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref)
 
 ### Typescript
 
