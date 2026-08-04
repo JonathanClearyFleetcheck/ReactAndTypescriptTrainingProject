@@ -20,6 +20,11 @@ button{
   padding: 10px 20px;
 }
 
+.darken-on-hover:hover {
+  filter: brightness(0.9);
+  background-color: #f0f0f0;
+}
+
 button {
   background-color: #2196f3;
   color: white;
@@ -83,23 +88,15 @@ ul{
   grid-area: button-col-1;
 }
 
-.button-col-2 {
-  grid-area: button-col-2;
-}
-
-.button-col-3 {
-  grid-area: button-col-3;
-}
-
 li {
   margin: 0.5rem 0;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   display: grid;
-  grid-template-columns: 1fr 90px 90px 90px;
+  grid-template-columns: 1fr 90px;
   grid-template-rows: auto;
-  grid-template-areas: "taskName button-col-1 button-col-2 button-col-3";
+  grid-template-areas: "taskName button-col-1";
   gap: 0.5rem;
   align-items: center;
 }

@@ -1,5 +1,5 @@
 import type { Task } from "../types/task.ts";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function TaskListItem({
   task,
@@ -11,7 +11,10 @@ export function TaskListItem({
   deleteTask: (taskId: number) => void;
 }) {
   let [isEditing, setIsEditing] = useState(false);
+  let [shouldFocus, setShouldFocus] = useState(false);
   let [taskName, setTaskName] = useState(task.name);
+
+  let inputRef = useRef<HTMLInputElement>(null);
 
   const handleSaveEdit = () => {
     editTask(task.id, taskName);
@@ -25,10 +28,32 @@ export function TaskListItem({
 
   const handleEdit = () => {
     setIsEditing(true);
+    setShouldFocus(true);
   };
 
   const handleDelete = () => {
     deleteTask(task.id);
+  };
+
+  useEffect(() => {
+    if (!isEditing || !shouldFocus) {
+      return;
+    }
+
+    inputRef.current?.focus();
+    setShouldFocus(false);
+  }, [isEditing]);
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSaveEdit();
+      return;
+    }
+
+    if (e.key === "Escape") {
+      handleCancelEdit();
+      return;
+    }
   };
 
   return (
@@ -39,25 +64,19 @@ export function TaskListItem({
           className="task-name"
           value={taskName}
           onChange={(e) => setTaskName(e.target.value)}
+          ref={inputRef}
+          onBlur={handleSaveEdit}
+          onKeyDown={handleInputKeyDown}
         />
       ) : (
-        <span className="task-name bordered">{taskName}</span>
+        <span
+          className="task-name bordered darken-on-hover"
+          onClick={handleEdit}
+        >
+          {taskName}
+        </span>
       )}
-      {isEditing ? (
-        <>
-          <button className="save button-col-1" onClick={handleSaveEdit}>
-            Save
-          </button>
-          <button className="cancel button-col-2" onClick={handleCancelEdit}>
-            Cancel
-          </button>
-        </>
-      ) : (
-        <button className="edit button-col-2" onClick={handleEdit}>
-          Edit
-        </button>
-      )}
-      <button className="delete button-col-3" onClick={handleDelete}>
+      <button className="delete button-col-1" onClick={handleDelete}>
         Delete
       </button>
     </>
