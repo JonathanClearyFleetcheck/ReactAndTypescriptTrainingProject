@@ -1,6 +1,9 @@
 import type { Task } from "../types/task.ts";
 import { useEffect, useRef, useState } from "react";
 
+const maxTaskNameLength = 35;
+const minTaskNameLength = 1;
+
 export function TaskListItem({
   task,
   editTask,
@@ -13,10 +16,18 @@ export function TaskListItem({
   let [isEditing, setIsEditing] = useState(false);
   let [shouldFocus, setShouldFocus] = useState(false);
   let [taskName, setTaskName] = useState(task.name);
+  let [isValid, setIsValid] = useState(true);
 
   let inputRef = useRef<HTMLInputElement>(null);
 
   const handleSaveEdit = () => {
+    if (taskName.length > maxTaskNameLength || taskName.length < minTaskNameLength) {
+      setIsValid(false);
+      inputRef.current?.focus();
+      return;
+    }
+
+    setIsValid(true);
     editTask(task.id, taskName);
     setIsEditing(false);
   };
@@ -56,18 +67,38 @@ export function TaskListItem({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > maxTaskNameLength || e.target.value.length < minTaskNameLength) {
+      setIsValid(false);
+      setTaskName(e.target.value.substring(0, maxTaskNameLength));
+      return;
+    }
+
+    setIsValid(true);
+    setTaskName(e.target.value);
+  };
+
   return (
     <>
       {isEditing ? (
-        <input
-          type="text"
-          className="task-name"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          ref={inputRef}
-          onBlur={handleSaveEdit}
-          onKeyDown={handleInputKeyDown}
-        />
+        <div className="relative-container">
+          <input
+            type="text"
+            className={isValid ? "task-name" : "task-name invalid"}
+            value={taskName}
+            onChange={handleInputChange}
+            ref={inputRef}
+            onBlur={handleSaveEdit}
+            onKeyDown={handleInputKeyDown}
+          />
+          <span
+            className={
+              isValid ? "task-name-length" : "task-name-length invalid"
+            }
+          >
+            {taskName.length}/{maxTaskNameLength}
+          </span>
+        </div>
       ) : (
         <span
           className="task-name bordered darken-on-hover"
