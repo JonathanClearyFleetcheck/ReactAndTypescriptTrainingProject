@@ -1,13 +1,51 @@
+html,
+body,
+#root,
+.app-container {
+  margin: unset;
+  padding: unset;
+  width: stretch;
+  height: stretch;
+  overflow: hidden;
+}
+
+.body {
+  width: 100%;
+  height: 85vh;
+  overflow-y: auto;
+}
+
+.header {
+  background-color: #1976d2;
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto;
+  grid-template-areas: "title controls";
+}
+
 .title {
   font-size: 2rem;
   font-weight: bold;
-  color: grey;
+  color: white;
   font-family: "Arial", sans-serif;
+  grid-area: title;
+}
+
+.controls {
+  grid-area: controls;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: no-wrap;
 }
 
 p,
 span,
-button, 
+button,
 input[type="text"] {
   font-size: 1rem;
   font-family: "Arial", sans-serif;
@@ -15,7 +53,7 @@ input[type="text"] {
 
 p,
 span,
-button{
+button {
   min-height: 15px;
   padding: 10px 20px;
 }
@@ -73,7 +111,7 @@ button.delete:hover {
   background-color: #d32f2f;
 }
 
-ul{
+ul {
   list-style-type: none;
   margin: 1rem;
   padding: unset;

@@ -38,18 +38,26 @@ function App() {
   };
 
   return (
-    <div>
       <div className="app-container">
-        <div className="title">Task Manager</div>
-        <div className="controls">
-          <button className="add" onClick={() => addTask("New Task")}>Add Task</button>
+        <div className="header">
+          <div className="title">Task Manager</div>
+          <div className="controls">
+            <button className="add" onClick={() => addTask("New Task")}>
+              Add Task
+            </button>
+          </div>
         </div>
-        {tasks.length > 0 ? (
-          <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
-        ) : (
-          <h4>All tasks completed!</h4>
-        )}
+        <div className="body">
+          {tasks.length > 0 ? (
+            <TaskList
+              tasks={tasks}
+              editTask={editTask}
+              deleteTask={deleteTask}
+            />
+          ) : (
+            <h4>All tasks completed!</h4>
+          )}
+        </div>
       </div>
-    </div>
   );
 }
