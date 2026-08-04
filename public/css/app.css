@@ -59,7 +59,6 @@ button.edit:hover {
 
 button.cancel {
   background-color: rgb(156, 156, 156);
-  color: black;
 }
 
 button.cancel:hover {
