@@ -28,6 +28,7 @@ Here are some tasks you can undertake to improve your understanding of the follo
 - Add a footer that is always visible similar to the Header(style this as you please). The footer should contain a count of the current tasks. [Helpful Resource](https://react.dev/learn/your-first-component)
 - When you click the edit button on a task the task name input should be focused. [Helpful Resource](https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref)
 - Remove the Edit, Save & Cancel buttons replacing them with events to improve the user experience. You can use onClick, onBlur, onKeyPress(esc & enter) bonus points if you update the styling to help indicate the interactive element. [Helpful Resource](https://react.dev/learn/responding-to-events)
+- Add max length validation to the task name input this should include an indicator that appears when the element is focused and styling to indicate when the length is too long or short. It should also prevent unfocusing the element & saving the task name when it is invalid. (Combine what you've learned so far to complete this task)
 - Add a select checkbox to each task that allows you to select a task in the list. The selected task should be styled to show that it has been selected and there should be a count of the selected tasks that appears when at least one task is selected. [Helpful Resource](https://react.dev/learn/managing-state)
 
 ### Typescript
