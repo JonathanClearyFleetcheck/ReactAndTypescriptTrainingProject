@@ -7,12 +7,13 @@ body,
   width: stretch;
   height: stretch;
   overflow: hidden;
+  position: relative;
 }
 
 .body {
   width: 100%;
-  height: 85vh;
-  overflow-y: auto;
+  height: stretch;
+  padding: 11vh 0 11vh 0;
 }
 
 .header {
@@ -23,6 +24,32 @@ body,
   grid-template-columns: 1fr auto;
   grid-template-rows: auto;
   grid-template-areas: "title controls";
+  height: 10vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: stretch;
+  z-index: 1;
+  align-items: center;
+}
+
+.footer {
+  background-color: #1976d2;
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto;
+  grid-template-areas: "footer-text footer-controls";
+  height: 10vh;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: stretch;
+  z-index: 1;
+  align-items: center;
 }
 
 .title {
@@ -31,6 +58,7 @@ body,
   color: white;
   font-family: "Arial", sans-serif;
   grid-area: title;
+  height: auto;
 }
 
 .controls {
@@ -56,6 +84,14 @@ span,
 button {
   min-height: 15px;
   padding: 10px 20px;
+}
+
+.dark-text {
+  color: #333;
+}
+
+.light-text{
+  color: #fff;
 }
 
 .darken-on-hover:hover {
@@ -117,27 +153,8 @@ button.delete:hover {
   background-color: #d32f2f;
 }
 
-ul {
-  list-style-type: none;
-  margin: 1rem;
-  padding: unset;
-}
-
 .button-col-1 {
   grid-area: button-col-1;
-}
-
-li {
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: grid;
-  grid-template-columns: 1fr 90px;
-  grid-template-rows: auto;
-  grid-template-areas: "taskName button-col-1";
-  gap: 0.5rem;
-  align-items: center;
 }
 
 .bordered {
@@ -180,4 +197,28 @@ input[type="text"].invalid {
 
 .task-name-length.invalid {
   color: #fd031c;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  overflow-y: auto;
+  height: stretch;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.task-list-item {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  grid-template-rows: auto;
+  grid-template-areas: "taskName button-col-1";
+  gap: 0.5rem;
+  align-items: center;
 }

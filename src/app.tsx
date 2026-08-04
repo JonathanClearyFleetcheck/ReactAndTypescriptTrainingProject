@@ -39,7 +39,7 @@ function App() {
 
   return (
       <div className="app-container">
-        <div className="header">
+        <div className="header light-text">
           <div className="title">Task Manager</div>
           <div className="controls">
             <button className="add" onClick={() => addTask("New Task")}>
@@ -57,6 +57,9 @@ function App() {
           ) : (
             <h4>All tasks completed!</h4>
           )}
+        </div>
+        <div className="footer light-text">
+          <p>Task Manager App - React + TypeScript</p>
         </div>
       </div>
   );

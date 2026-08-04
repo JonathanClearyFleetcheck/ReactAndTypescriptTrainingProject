@@ -79,7 +79,7 @@ export function TaskListItem({
   };
 
   return (
-    <>
+    <div className="task-list-item">
       {isEditing ? (
         <div className="relative-container">
           <input
@@ -110,6 +110,6 @@ export function TaskListItem({
       <button className="delete button-col-1" onClick={handleDelete}>
         Delete
       </button>
-    </>
+    </div>
   );
 }
