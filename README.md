@@ -25,8 +25,10 @@ Here are some tasks you can undertake to improve your understanding of the follo
 - [NPM - Documentation](https://docs.npmjs.com/)
 
 ### React
+- Add a footer that is always visible similar to the Header(style this as you please). The footer should contain a count of the current tasks. [Helpful Resource](https://react.dev/learn/your-first-component)
 - When you click the edit button on a task the task name input should be focused. [Helpful Resource](https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref)
-- Remove the Edit, Save & Cancel buttons replacing them with events to improve the user experience. You can use onClick, onBlur, onKeyPress(esc & enter) bonus points if you update the styling to make it look cool. [Helpful Resource](https://react.dev/learn/responding-to-events)
+- Remove the Edit, Save & Cancel buttons replacing them with events to improve the user experience. You can use onClick, onBlur, onKeyPress(esc & enter) bonus points if you update the styling to help indicate the interactive element. [Helpful Resource](https://react.dev/learn/responding-to-events)
+- Add a select checkbox to each task that allows you to select a task in the list. The selected task should be styled to show that it has been selected and there should be a count of the selected tasks that appears when at least one task is selected. [Helpful Resource](https://react.dev/learn/managing-state)
 
 ### Typescript
 
