@@ -1,0 +1,39 @@
+{
+  "name": "taskmanagerapp",
+  "version": "1.0.0",
+  "description": "A task management application that allows you to stay on top of you short and long term goals",
+  "keywords": [
+    "task",
+    "tasks",
+    "list",
+    "management",
+    "organisation",
+    "goals",
+    "todo",
+    "planner",
+    "productivity"
+  ],
+  "license": "ISC",
+  "author": "Jon",
+  "type": "module",
+  "main": "dist/index.min.js",
+  "scripts": {
+    "build": "npm run parse && npm run esbuild && npm run serve",
+    "parse": "tsc -noEmit -p tsconfig.json",
+    "esbuild": "node build.mts",
+    "serve": "node server.mts"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "esbuild": "^0.28.1",
+    "typescript": "^7.0.2"
+  }
+}

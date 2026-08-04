@@ -1,0 +1,120 @@
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: grey;
+  font-family: "Arial", sans-serif;
+}
+
+p,
+span,
+button, 
+input[type="text"] {
+  font-size: 1rem;
+  font-family: "Arial", sans-serif;
+}
+
+p,
+span,
+button{
+  min-height: 15px;
+  padding: 10px 20px;
+}
+
+button {
+  background-color: #2196f3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1976d2;
+}
+
+button.add {
+  background-color: #4caf50;
+}
+
+button.add:hover {
+  background-color: #388e3c;
+}
+
+button.save {
+  background-color: #4caf50;
+}
+
+button.save:hover {
+  background-color: #388e3c;
+}
+
+button.edit {
+  background-color: #2196f3;
+}
+
+button.edit:hover {
+  background-color: #1976d2;
+}
+
+button.cancel {
+  background-color: rgb(156, 156, 156);
+  color: black;
+}
+
+button.cancel:hover {
+  background-color: rgb(120, 120, 120);
+}
+
+button.delete {
+  background-color: #f44336;
+}
+
+button.delete:hover {
+  background-color: #d32f2f;
+}
+
+ul{
+  list-style-type: none;
+  margin: 1rem;
+  padding: unset;
+}
+
+.button-col-1 {
+  grid-area: button-col-1;
+}
+
+.button-col-2 {
+  grid-area: button-col-2;
+}
+
+.button-col-3 {
+  grid-area: button-col-3;
+}
+
+li {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 90px 90px 90px;
+  grid-template-rows: auto;
+  grid-template-areas: "taskName button-col-1 button-col-2 button-col-3";
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bordered {
+  border: 1px solid transparent;
+  border-radius: 5px;
+}
+
+input[type="text"] {
+  height: 38px;
+  padding: 0px 20px;
+  outline: unset;
+  border: unset;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
