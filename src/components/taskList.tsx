@@ -5,6 +5,9 @@ export function TaskList({
   tasks,
   filteredTasks,
   currentPage,
+  pageStart,
+  pageEnd,
+  totalPages,
   pageSize,
   editTask,
   deleteTask,
@@ -12,6 +15,9 @@ export function TaskList({
   tasks: Task[];
   filteredTasks: Task[];
   currentPage: number;
+  pageStart: number;
+  pageEnd: number;
+  totalPages: number;
   pageSize: number;
   editTask: (taskId: number, newTaskName: string) => void;
   deleteTask: (taskId: number) => void;
@@ -35,9 +41,10 @@ export function TaskList({
               index >= (currentPage - 1) * pageSize &&
               index < currentPage * pageSize,
           )
-          .map((task) => (
+          .map((task, index) => (
             <TaskListItem
               key={task.id}
+              index={pageStart + index}
               task={task}
               editTask={editTask}
               deleteTask={deleteTask}

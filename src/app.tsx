@@ -15,6 +15,8 @@ export default function createReactApp(rootId: string) {
   root.render(<App />);
 }
 
+const pageSizeOptions = [5, 10, 25, 50, 100];
+
 function App() {
   let [lastTaskId, setLastTaskId] = useState(1);
   let [tasks, setTasks] = useState<Task[]>([{ id: 1, name: "Sample Task" }]);
@@ -24,14 +26,26 @@ function App() {
 
   let filteredTasks = useMemo(
     () =>
-      tasks.filter((task) => task.name.toLowerCase().includes(searchQuery.toLowerCase())),
+      tasks.filter((task) =>
+        task.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
     [tasks, searchQuery],
+  );
+
+  const pageStart = useMemo(
+    () => Math.min(pageSize * (currentPage - 1) + 1, filteredTasks.length),
+    [currentPage, pageSize, filteredTasks.length],
+  );
+
+  const pageEnd = useMemo(
+    () => Math.min(pageSize * currentPage, filteredTasks.length),
+    [currentPage, pageSize, filteredTasks.length],
   );
 
   const pageInfo = useMemo(
     () =>
-      `Showing ${Math.min(pageSize * (currentPage - 1) + 1, filteredTasks.length)} to ${Math.min(filteredTasks.length, pageSize * currentPage)} of ${filteredTasks.length} tasks`,
-    [pageSize, currentPage, filteredTasks.length],
+      `Showing ${pageStart} to ${pageEnd} of ${filteredTasks.length} tasks`,
+    [pageStart, pageEnd, filteredTasks.length],
   );
 
   const totalPages = useMemo(
@@ -75,6 +89,15 @@ function App() {
     [tasks],
   );
 
+  const handlePageSizeChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newPageSize = Number(e.target.value);
+      setPageSize(newPageSize);
+      setCurrentPage(1);
+    },
+    [],
+  );
+
   return (
     <div className="app-container">
       <Header>
@@ -83,6 +106,18 @@ function App() {
         </button>
       </Header>
       <div className="body">
+        <div className="page-size">
+          <label className="text-no-wrap">
+            <select value={pageSize} onChange={handlePageSizeChange}>
+              {pageSizeOptions.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+            &nbsp; tasks per page
+          </label>
+        </div>
         <div className="search">
           Search:
           <input
@@ -95,6 +130,9 @@ function App() {
           tasks={tasks}
           filteredTasks={filteredTasks}
           currentPage={currentPage}
+          pageStart={pageStart}
+          pageEnd={pageEnd}
+          totalPages={totalPages}
           pageSize={pageSize}
           editTask={editTask}
           deleteTask={deleteTask}

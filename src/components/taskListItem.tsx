@@ -6,10 +6,12 @@ const minTaskNameLength = 1;
 
 export function TaskListItem({
   task,
+  index,
   editTask,
   deleteTask,
 }: {
   task: Task;
+  index: number;
   editTask: (taskId: number, newTaskName: string) => void;
   deleteTask: (taskId: number) => void;
 }) {
@@ -55,29 +57,35 @@ export function TaskListItem({
     setShouldFocus(false);
   }, [isEditing]);
 
-  const handleInputKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSaveEdit();
-      return;
-    }
+  const handleInputKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        handleSaveEdit();
+        return;
+      }
 
-    if (e.key === "Escape") {
-      handleCancelEdit();
-      return;
-    }
-  }, [handleSaveEdit, handleCancelEdit]);
+      if (e.key === "Escape") {
+        handleCancelEdit();
+        return;
+      }
+    },
+    [handleSaveEdit, handleCancelEdit],
+  );
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      e.target.value.length > maxTaskNameLength ||
-      e.target.value.length < minTaskNameLength
-    ) {
-      setTaskName(e.target.value.substring(0, maxTaskNameLength));
-      return;
-    }
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (
+        e.target.value.length > maxTaskNameLength ||
+        e.target.value.length < minTaskNameLength
+      ) {
+        setTaskName(e.target.value.substring(0, maxTaskNameLength));
+        return;
+      }
 
-    setTaskName(e.target.value);
-  }, []);
+      setTaskName(e.target.value);
+    },
+    [],
+  );
 
   let taskNameLength = useMemo(() => taskName.length, [taskName]);
 
@@ -90,6 +98,7 @@ export function TaskListItem({
 
   return (
     <div className="task-list-item">
+      <span>{index}.</span>
       {isEditing ? (
         <div className="relative-container">
           <input

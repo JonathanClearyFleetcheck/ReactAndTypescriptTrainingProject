@@ -23,6 +23,7 @@ body,
   padding: calc(var(--header-height) + 0.5rem) 0.5rem calc(var(--footer-height) + 0.5rem) 0.5rem;
   gap: 0.25rem;
   display: grid;
+  align-items: center;
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
@@ -96,7 +97,18 @@ p,
 span,
 button {
   min-height: 15px;
-  padding: 10px 20px;
+  padding: 10px;
+}
+
+select{
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+.text-no-wrap {
+  white-space: nowrap;
 }
 
 .text-center {
@@ -265,14 +277,24 @@ input[type="text"].invalid {
   flex-wrap: no-wrap;
 }
 
+.page-size {
+  grid-area: page-sizing;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: no-wrap;
+}
+
 .task-list-item {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   display: grid;
-  grid-template-columns: 1fr 90px;
+  grid-template-columns: auto 1fr 90px;
   grid-template-rows: auto;
-  grid-template-areas: "taskName button-col-1";
+  grid-template-areas: "index taskName button-col-1";
   gap: 0.5rem;
   align-items: center;
 }
