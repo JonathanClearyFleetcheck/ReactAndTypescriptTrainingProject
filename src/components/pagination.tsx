@@ -19,13 +19,13 @@ const paginationButtons = [
   {
     text: ">",
     disabledFunc: (currentPage: number, totalPages: number) =>
-      currentPage === totalPages,
+      currentPage >= totalPages,
     clickHandlerId: 3,
   },
   {
     text: ">>",
     disabledFunc: (currentPage: number, totalPages: number) =>
-      currentPage === totalPages,
+      currentPage >= totalPages,
     clickHandlerId: 4,
   },
 ];

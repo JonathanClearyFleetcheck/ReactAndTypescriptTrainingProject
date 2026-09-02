@@ -20,16 +20,23 @@ function App() {
   let [tasks, setTasks] = useState<Task[]>([{ id: 1, name: "Sample Task" }]);
   let [currentPage, setCurrentPage] = useState(1);
   let [pageSize, setPageSize] = useState(10);
+  let [searchQuery, setSearchQuery] = useState("");
+
+  let filteredTasks = useMemo(
+    () =>
+      tasks.filter((task) => task.name.toLowerCase().includes(searchQuery.toLowerCase())),
+    [tasks, searchQuery],
+  );
 
   const pageInfo = useMemo(
     () =>
-      `Showing ${pageSize * (currentPage - 1) + 1} to ${Math.min(tasks.length, pageSize * currentPage)} of ${tasks.length} tasks`,
-    [pageSize, currentPage, tasks.length],
+      `Showing ${Math.min(pageSize * (currentPage - 1) + 1, filteredTasks.length)} to ${Math.min(filteredTasks.length, pageSize * currentPage)} of ${filteredTasks.length} tasks`,
+    [pageSize, currentPage, filteredTasks.length],
   );
 
   const totalPages = useMemo(
-    () => Math.ceil(tasks.length / pageSize),
-    [tasks.length, pageSize],
+    () => Math.ceil(filteredTasks.length / pageSize),
+    [filteredTasks.length, pageSize],
   );
 
   const addTask = useCallback(
@@ -43,7 +50,7 @@ function App() {
       if (currentPage < totalPages) {
         setCurrentPage(totalPages);
       }
-      if (tasks.length % pageSize === 0) {
+      if (tasks.length > 0 && tasks.length % pageSize === 0) {
         setCurrentPage((oldValue) => oldValue + 1);
       }
     },
@@ -76,8 +83,17 @@ function App() {
         </button>
       </Header>
       <div className="body">
+        <div className="search">
+          Search:
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <TaskList
           tasks={tasks}
+          filteredTasks={filteredTasks}
           currentPage={currentPage}
           pageSize={pageSize}
           editTask={editTask}

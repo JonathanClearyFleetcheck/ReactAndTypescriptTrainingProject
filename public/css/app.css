@@ -255,6 +255,16 @@ input[type="text"].invalid {
   flex-wrap: no-wrap;
 }
 
+.search {
+  grid-area: search;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: no-wrap;
+}
+
 .task-list-item {
   padding: 0.5rem;
   border: 1px solid #ccc;
