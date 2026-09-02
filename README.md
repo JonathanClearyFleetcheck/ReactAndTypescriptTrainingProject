@@ -24,13 +24,13 @@ Here are some tasks you can undertake to improve your understanding of the follo
 - [Typescript Tutorial](https://www.w3schools.com/typescript/typescript_intro.php)
 - [NPM - Documentation](https://docs.npmjs.com/)
 
-### React
-- Add a footer that is always visible similar to the Header(style this as you please). The footer should contain a count of the current tasks. [Helpful Resource](https://react.dev/learn/your-first-component)
+### Tasks
+- Add a footer that is always visible similar to the Header(style this as you please). [Helpful Resource](https://react.dev/learn/your-first-component)
 - When you click the edit button on a task the task name input should be focused. [Helpful Resource](https://react.dev/reference/react/useRef#manipulating-the-dom-with-a-ref)
 - Remove the Edit, Save & Cancel buttons replacing them with events to improve the user experience. You can use onClick, onBlur, onKeyPress(esc & enter) bonus points if you update the styling to help indicate the interactive element. [Helpful Resource](https://react.dev/learn/responding-to-events)
 - Add max length validation to the task name input this should include an indicator that appears when the element is focused and styling to indicate when the length is too long or short. It should also prevent unfocusing the element & saving the task name when it is invalid. (Combine what you've learned so far to complete this task)
+- Add pagination to the task list. You may notice there are already current page and page size consts in the TaskList component these will need to become state variables. focus first on the pagination and we can worry about page sizing later. You may need to redo some of the styling to support this.
+- When adding a new task it would be good to display that new task on the page. Since the new task will always appear last in the list set the current page to the last page so that it is visible. Consider using useMemo to cache the lastPage index so that you don't need to recaculate it on every render. Consider what this will mean when adding an item that would create a new page.
+- Add a page size dropdown this should cause any cached calculations that you may have used to recalculate and should set the current page to the first page when it is changed.
+- Add a search bar that will filter the tasks by their names. How will you prevent it from recalculating the filtered list each time a render occurs? As this would likely degrade the apps performance.
 - Add a select checkbox to each task that allows you to select a task in the list. The selected task should be styled to show that it has been selected and there should be a count of the selected tasks that appears when at least one task is selected. [Helpful Resource](https://react.dev/learn/managing-state)
-
-### Typescript
-
-### Node Packet Manager
