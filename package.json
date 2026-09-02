@@ -18,10 +18,12 @@
   "type": "module",
   "main": "dist/index.min.js",
   "scripts": {
-    "build": "npm run parse && npm run esbuild && npm run serve",
-    "parse": "tsc -noEmit -p tsconfig.json",
+    "launch": "npm run build && npm run serve",
+    "build": "npm run test && npm run esbuild",
+    "test": "npm run parse",
+    "serve": "node server.mts",
     "esbuild": "node build.mts",
-    "serve": "node server.mts"
+    "parse": "tsc -noEmit -p tsconfig.json"
   },
   "dependencies": {
     "express": "^5.2.1",
