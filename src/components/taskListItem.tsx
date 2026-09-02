@@ -1,5 +1,5 @@
 import type { Task } from "../types/task.ts";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const maxTaskNameLength = 35;
 const minTaskNameLength = 1;
@@ -16,35 +16,35 @@ export function TaskListItem({
   let [isEditing, setIsEditing] = useState(false);
   let [shouldFocus, setShouldFocus] = useState(false);
   let [taskName, setTaskName] = useState(task.name);
-  let [isValid, setIsValid] = useState(true);
 
   let inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSaveEdit = () => {
-    if (taskName.length > maxTaskNameLength || taskName.length < minTaskNameLength) {
-      setIsValid(false);
+  const handleSaveEdit = useCallback(() => {
+    if (
+      taskName.length > maxTaskNameLength ||
+      taskName.length < minTaskNameLength
+    ) {
       inputRef.current?.focus();
       return;
     }
 
-    setIsValid(true);
     editTask(task.id, taskName);
     setIsEditing(false);
-  };
+  }, [editTask, task.id, taskName]);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setTaskName(task.name);
     setIsEditing(false);
-  };
+  }, [task.name]);
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     setIsEditing(true);
     setShouldFocus(true);
-  };
+  }, []);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     deleteTask(task.id);
-  };
+  }, [deleteTask, task.id]);
 
   useEffect(() => {
     if (!isEditing || !shouldFocus) {
@@ -55,7 +55,7 @@ export function TaskListItem({
     setShouldFocus(false);
   }, [isEditing]);
 
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSaveEdit();
       return;
@@ -65,18 +65,28 @@ export function TaskListItem({
       handleCancelEdit();
       return;
     }
-  };
+  }, [handleSaveEdit, handleCancelEdit]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > maxTaskNameLength || e.target.value.length < minTaskNameLength) {
-      setIsValid(false);
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      e.target.value.length > maxTaskNameLength ||
+      e.target.value.length < minTaskNameLength
+    ) {
       setTaskName(e.target.value.substring(0, maxTaskNameLength));
       return;
     }
 
-    setIsValid(true);
     setTaskName(e.target.value);
-  };
+  }, []);
+
+  let taskNameLength = useMemo(() => taskName.length, [taskName]);
+
+  let isValid = useMemo(
+    () =>
+      taskNameLength <= maxTaskNameLength &&
+      taskNameLength >= minTaskNameLength,
+    [taskNameLength],
+  );
 
   return (
     <div className="task-list-item">
@@ -96,15 +106,22 @@ export function TaskListItem({
               isValid ? "task-name-length" : "task-name-length invalid"
             }
           >
-            {taskName.length}/{maxTaskNameLength}
+            {taskNameLength}/{maxTaskNameLength}
           </span>
         </div>
       ) : (
         <span
-          className="task-name bordered darken-on-hover"
+          className="task-name relative-container bordered darken-on-hover"
           onClick={handleEdit}
         >
           {taskName}
+          <span
+            className={
+              isValid ? "task-name-length" : "task-name-length invalid"
+            }
+          >
+            {taskNameLength}/{maxTaskNameLength}
+          </span>
         </span>
       )}
       <button className="delete button-col-1" onClick={handleDelete}>
