@@ -11,7 +11,7 @@ This project gives you a template project with tasks and resource links that wil
 ### Running the Project
 - Your now ready to run the project!
 - Go back into package.json and take a look at the "scripts" object.
-- There you will see some commands that you can run to utilise some of the dev tools in this project. The one you'll need is "build".
+- There you will see some commands that you can run to utilise some of the dev tools in this project. The two that you'll need are: "build" & "launch". Build compiles the executable js file so you can check for typescript errors and "launch" will build and run the the project and serve a local server. The cli should show you the localhost url you can open this in vscode with ctrl+click or copy it into your prefered browser. 
 - You can run these commands by going back into your console (navigating to your repo folder that contains the packages.json file) and typing "npm run {your-command}" in this case "npm run build".
 
 # Learning Tasks
