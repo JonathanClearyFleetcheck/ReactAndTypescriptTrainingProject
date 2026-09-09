@@ -39,10 +39,7 @@ function App() {
     currentPage,
   );
 
-  const totalPages = useMemo(
-    () => Math.ceil(filteredTasks.length / pageSize),
-    [filteredTasks.length, pageSize],
-  );
+  const totalPages = useTotalPagesMemo(filteredTasks, pageSize);
 
   usePreventPageOverflowEffect(currentPage, totalPages, setCurrentPage);
 
@@ -116,6 +113,13 @@ function App() {
     </div>
   );
 }
+function useTotalPagesMemo(filteredTasks: Task[], pageSize: number) {
+  return useMemo(
+    () => Math.ceil(filteredTasks.length / pageSize),
+    [filteredTasks.length, pageSize]
+  );
+}
+
 function useHandleSearchQueryChangeCallback(
   setSearchQuery: Dispatch<SetStateAction<string>>,
 ) {
