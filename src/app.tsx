@@ -1,5 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { useCallback, useState, useMemo } from "react";
+import {
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import type { Task } from "./types/task.ts";
 import { TaskList } from "./components/taskList.tsx";
 import { Header } from "./components/header.tsx";
@@ -24,28 +31,12 @@ function App() {
   let [pageSize, setPageSize] = useState(10);
   let [searchQuery, setSearchQuery] = useState("");
 
-  let filteredTasks = useMemo(
-    () =>
-      tasks.filter((task) =>
-        task.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      ),
-    [tasks, searchQuery],
-  );
+  let filteredTasks = useFilteredTasksMemo(tasks, searchQuery);
 
-  const pageStart = useMemo(
-    () => Math.min(pageSize * (currentPage - 1) + 1, filteredTasks.length),
-    [currentPage, pageSize, filteredTasks.length],
-  );
-
-  const pageEnd = useMemo(
-    () => Math.min(pageSize * currentPage, filteredTasks.length),
-    [currentPage, pageSize, filteredTasks.length],
-  );
-
-  const pageInfo = useMemo(
-    () =>
-      `Showing ${pageStart} to ${pageEnd} of ${filteredTasks.length} tasks`,
-    [pageStart, pageEnd, filteredTasks.length],
+  const { pageStart, pageEnd, pageInfo } = usePageInfoMemo(
+    filteredTasks,
+    pageSize,
+    currentPage,
   );
 
   const totalPages = useMemo(
@@ -53,50 +44,27 @@ function App() {
     [filteredTasks.length, pageSize],
   );
 
-  const addTask = useCallback(
-    (taskName: string) => {
-      const newTask: Task = {
-        id: lastTaskId + 1,
-        name: taskName,
-      };
-      setTasks([...tasks, newTask]);
-      setLastTaskId((value) => value + 1);
-      if (currentPage < totalPages) {
-        setCurrentPage(totalPages);
-      }
-      if (tasks.length > 0 && tasks.length % pageSize === 0) {
-        setCurrentPage((oldValue) => oldValue + 1);
-      }
-    },
-    [lastTaskId, tasks, currentPage, totalPages],
+  usePreventPageOverflowEffect(currentPage, totalPages, setCurrentPage);
+
+  const addTask = useAddTaskCallback(
+    lastTaskId,
+    setTasks,
+    tasks,
+    setLastTaskId,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    pageSize,
   );
 
-  const deleteTask = useCallback(
-    (taskId: number) => {
-      setTasks([...tasks.filter((task) => task.id !== taskId)]);
-    },
-    [tasks],
-  );
+  const deleteTask = useDeleteTaskCallback(setTasks, tasks);
 
-  const editTask = useCallback(
-    (taskId: number, newTaskName: string) => {
-      setTasks([
-        ...tasks.map((task) =>
-          task.id === taskId ? { ...task, name: newTaskName } : task,
-        ),
-      ]);
-    },
-    [tasks],
-  );
+  const editTask = useEditTaskCallback(setTasks, tasks);
 
-  const handlePageSizeChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const newPageSize = Number(e.target.value);
-      setPageSize(newPageSize);
-      setCurrentPage(1);
-    },
-    [],
-  );
+  const handlePageSizeChange = useHandlePageSizeChangeCallback(setPageSize);
+
+  const handleSearchQueryChange =
+    useHandleSearchQueryChangeCallback(setSearchQuery);
 
   return (
     <div className="app-container">
@@ -123,7 +91,7 @@ function App() {
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchQueryChange}
           />
         </div>
         <TaskList
@@ -147,4 +115,130 @@ function App() {
       <Footer></Footer>
     </div>
   );
+}
+function useHandleSearchQueryChangeCallback(
+  setSearchQuery: Dispatch<SetStateAction<string>>,
+) {
+  return useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+}
+
+function useHandlePageSizeChangeCallback(
+  setPageSize: Dispatch<SetStateAction<number>>,
+) {
+  return useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPageSize = Number(e.target.value);
+    setPageSize(newPageSize);
+  }, []);
+}
+
+function useEditTaskCallback(
+  setTasks: Dispatch<SetStateAction<Task[]>>,
+  tasks: Task[],
+) {
+  return useCallback(
+    (taskId: number, newTaskName: string) => {
+      setTasks([
+        ...tasks.map((task) =>
+          task.id === taskId ? { ...task, name: newTaskName } : task,
+        ),
+      ]);
+    },
+    [tasks],
+  );
+}
+
+function useDeleteTaskCallback(
+  setTasks: Dispatch<SetStateAction<Task[]>>,
+  tasks: Task[],
+) {
+  return useCallback(
+    (taskId: number) => {
+      setTasks([...tasks.filter((task) => task.id !== taskId)]);
+    },
+    [tasks],
+  );
+}
+
+function useAddTaskCallback(
+  lastTaskId: number,
+  setTasks: Dispatch<SetStateAction<Task[]>>,
+  tasks: Task[],
+  setLastTaskId: Dispatch<SetStateAction<number>>,
+  currentPage: number,
+  totalPages: number,
+  setCurrentPage: Dispatch<SetStateAction<number>>,
+  pageSize: number,
+) {
+  return useCallback(
+    (taskName: string) => {
+      const newTask: Task = {
+        id: lastTaskId + 1,
+        name: taskName,
+      };
+      setTasks([...tasks, newTask]);
+      setLastTaskId((value) => value + 1);
+      if (currentPage < totalPages) {
+        setCurrentPage(totalPages);
+      }
+      if (tasks.length > 0 && tasks.length % pageSize === 0) {
+        setCurrentPage((oldValue) => oldValue + 1);
+      }
+    },
+    [lastTaskId, tasks, currentPage, totalPages],
+  );
+}
+
+function useFilteredTasksMemo(tasks: Task[], searchQuery: string) {
+  return useMemo(
+    () =>
+      tasks.filter((task) =>
+        task.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    [tasks, searchQuery],
+  );
+}
+
+function usePageInfoMemo(
+  filteredTasks: Task[],
+  pageSize: number,
+  currentPage: number,
+) {
+  const pageStart = useMemo(
+    () =>
+      Math.max(
+        0,
+        Math.min(filteredTasks.length, pageSize * (currentPage - 1) + 1),
+      ),
+    [currentPage, pageSize, filteredTasks.length],
+  );
+
+  const pageEnd = useMemo(
+    () => Math.min(pageSize * currentPage, filteredTasks.length),
+    [currentPage, pageSize, filteredTasks.length],
+  );
+
+  const pageInfo = useMemo(
+    () => `Showing ${pageStart} to ${pageEnd} of ${filteredTasks.length} tasks`,
+    [pageStart, pageEnd, filteredTasks.length],
+  );
+  return { pageStart, pageEnd, pageInfo };
+}
+
+function usePreventPageOverflowEffect(
+  currentPage: number,
+  totalPages: number,
+  setCurrentPage: Dispatch<SetStateAction<number>>,
+) {
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+      return;
+    }
+    if (currentPage < 1) {
+      setCurrentPage(1);
+      return;
+    }
+  }, [totalPages]);
 }

@@ -292,7 +292,7 @@ input[type="text"].invalid {
   border: 1px solid #ccc;
   border-radius: 5px;
   display: grid;
-  grid-template-columns: auto 1fr 90px;
+  grid-template-columns: min(5vw, 3rem) 1fr 90px;
   grid-template-rows: auto;
   grid-template-areas: "index taskName button-col-1";
   gap: 0.5rem;
