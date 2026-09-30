@@ -1,34 +1,5 @@
 import { useCallback } from "react";
-
-const paginationButtons = [
-  {
-    text: "<<",
-    disabledFunc: (currentPage: number, totalPages: number) =>
-      currentPage === 1,
-    clickHandlerId: 1,
-  },
-  {
-    text: "<",
-    disabledFunc: (currentPage: number, totalPages: number) =>
-      currentPage === 1,
-    clickHandlerId: 2,
-  },
-  {
-    content: (currentPage: number) => <span>{currentPage}</span>,
-  },
-  {
-    text: ">",
-    disabledFunc: (currentPage: number, totalPages: number) =>
-      currentPage >= totalPages,
-    clickHandlerId: 3,
-  },
-  {
-    text: ">>",
-    disabledFunc: (currentPage: number, totalPages: number) =>
-      currentPage >= totalPages,
-    clickHandlerId: 4,
-  },
-];
+import { paginationButtons } from "../resources/paginationButtons.tsx";
 
 export function Pagination({
   currentPage,
@@ -39,23 +10,65 @@ export function Pagination({
   totalPages: number;
   setCurrentPage: (page: number | ((prevPage: number) => number)) => void;
 }) {
-  const handleFirstPageClick = useCallback(() => {
-    setCurrentPage(1);
-  }, []);
+  const handleFirstPageClick = useHandleFirstPageClickCallback(setCurrentPage);
 
-  const handlePreviousPageClick = useCallback(() => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  }, []);
+  const handlePreviousPageClick =
+    useHandlePreviousPageClickCallback(setCurrentPage);
 
-  const handleNextPageClick = useCallback(() => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  }, [totalPages]);
+  const handleNextPageClick = useHandleNextPageClickCallback(
+    setCurrentPage,
+    totalPages,
+  );
 
-  const handleLastPageClick = useCallback(() => {
-    setCurrentPage(totalPages);
-  }, [totalPages]);
+  const handleLastPageClick = useHandleLastPageClickCallback(
+    setCurrentPage,
+    totalPages,
+  );
 
-  const clickHandlerProvider = useCallback(
+  const clickHandlerProvider = useClickHandlerProviderCallback(
+    handleFirstPageClick,
+    handlePreviousPageClick,
+    handleNextPageClick,
+    handleLastPageClick,
+  );
+
+  return (
+    <div className="pagination">
+      {paginationButtons.map((button) => {
+        if (button.type === "current") {
+          return <span>{currentPage}</span>;
+        }
+
+        if (!button.clickHandlerId) {
+          return <></>;
+        }
+
+        if (!button.text) {
+          return <></>;
+        }
+
+        return (
+          <button
+            key={button.clickHandlerId}
+            className="pagination-button"
+            disabled={button.disabledFunc(currentPage, totalPages)}
+            onClick={clickHandlerProvider(button.clickHandlerId)}
+          >
+            {button.text}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function useClickHandlerProviderCallback(
+  handleFirstPageClick: () => void,
+  handlePreviousPageClick: () => void,
+  handleNextPageClick: () => void,
+  handleLastPageClick: () => void,
+) {
+  return useCallback(
     (clickHandlerId: number) => {
       switch (clickHandlerId) {
         case 1:
@@ -77,25 +90,38 @@ export function Pagination({
       handleLastPageClick,
     ],
   );
+}
 
-  return (
-    <div className="pagination">
-      {paginationButtons.map((button) => {
-        if (button.content) {
-          return button.content(currentPage);
-        }
+function useHandleLastPageClickCallback(
+  setCurrentPage: (page: number | ((prevPage: number) => number)) => void,
+  totalPages: number,
+) {
+  return useCallback(() => {
+    setCurrentPage(totalPages);
+  }, [totalPages]);
+}
 
-        return (
-          <button
-            key={button.clickHandlerId}
-            className="pagination-button"
-            disabled={button.disabledFunc(currentPage, totalPages)}
-            onClick={clickHandlerProvider(button.clickHandlerId)}
-          >
-            {button.text}
-          </button>
-        );
-      })}
-    </div>
-  );
+function useHandleNextPageClickCallback(
+  setCurrentPage: (page: number | ((prevPage: number) => number)) => void,
+  totalPages: number,
+) {
+  return useCallback(() => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  }, [totalPages]);
+}
+
+function useHandlePreviousPageClickCallback(
+  setCurrentPage: (page: number | ((prevPage: number) => number)) => void,
+) {
+  return useCallback(() => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  }, []);
+}
+
+function useHandleFirstPageClickCallback(
+  setCurrentPage: (page: number | ((prevPage: number) => number)) => void,
+) {
+  return useCallback(() => {
+    setCurrentPage(1);
+  }, []);
 }
